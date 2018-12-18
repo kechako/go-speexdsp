@@ -49,7 +49,11 @@ func (p *Preprocessor) Run(buf []int16) {
 }
 
 func (p *Preprocessor) SetEchoCanceller(ec *EchoCanceller) {
-	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_ECHO_STATE, unsafe.Pointer(ec.state))
+	ecState := unsafe.Pointer(nil)
+	if ec != nil {
+		ecState = unsafe.Pointer(ec.state)
+	}
+	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_ECHO_STATE, ecState)
 }
 
 func (p *Preprocessor) EnableDenoise(enable bool) {
