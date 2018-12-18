@@ -15,9 +15,11 @@ type Preprocessor struct {
 	frameSize  int
 }
 
-func NewPreprocessor(sampleRate, frameSizeMs int) *Preprocessor {
-	frameSize := frameSizeMs * sampleRate / 1000
+func FrameSize(frameSizeMs, sampleRate int) int {
+	return frameSizeMs * sampleRate / 1000
+}
 
+func NewPreprocessor(sampleRate, frameSize int) *Preprocessor {
 	state := C.speex_preprocess_state_init(C.int(frameSize), C.int(sampleRate))
 
 	return &Preprocessor{
