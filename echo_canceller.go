@@ -18,10 +18,7 @@ type EchoCanceller struct {
 	filterLength    int
 }
 
-func NewEchoCanceller(micChannels, speekerChannels, sampleRate, frameSizeMs, filterLengthMs int) *EchoCanceller {
-	frameSize := frameSizeMs * sampleRate / 1000
-	filterLength := filterLengthMs * sampleRate / 1000
-
+func NewEchoCanceller(micChannels, speekerChannels, sampleRate, frameSize, filterLength int) *EchoCanceller {
 	var state *C.SpeexEchoState
 	if micChannels == 1 && speekerChannels == 1 {
 		state = C.speex_echo_state_init(C.int(frameSize), C.int(filterLength))
