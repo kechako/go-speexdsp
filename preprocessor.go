@@ -43,9 +43,10 @@ func (p *Preprocessor) FrameSize() int {
 	return p.frameSize
 }
 
-func (p *Preprocessor) Run(buf []int16) {
+// Run returns true if voice detected (only if VAD enabled)
+func (p *Preprocessor) Run(buf []int16) bool {
 	pbuf := (*C.spx_int16_t)(&buf[0])
-	C.speex_preprocess_run(p.state, pbuf)
+	return 1 == C.speex_preprocess_run(p.state, pbuf)
 }
 
 func (p *Preprocessor) SetEchoCanceller(ec *EchoCanceller) {
@@ -63,4 +64,13 @@ func (p *Preprocessor) EnableDenoise(enable bool) {
 	}
 
 	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_DENOISE, unsafe.Pointer(&denoise))
+}
+
+func (p *Preprocessor) EnableVAD(enable bool) {
+	var vad int = 0
+	if enable {
+		vad = 1
+	}
+
+	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_VAD, unsafe.Pointer(&vad))
 }
