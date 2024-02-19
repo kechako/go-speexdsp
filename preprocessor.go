@@ -74,3 +74,8 @@ func (p *Preprocessor) EnableVAD(enable bool) {
 
 	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_VAD, unsafe.Pointer(&vad))
 }
+
+// SetNoiceSupress set decibel value of the maximum attenuation of the noise (default is -15)
+func (p *Preprocessor) SetNoiceSupress(value int32) {
+	C.speex_preprocess_ctl(p.state, C.SPEEX_PREPROCESS_SET_NOISE_SUPPRESS, unsafe.Pointer(&value))
+}
